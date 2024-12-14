@@ -16,22 +16,45 @@ import {
   Security,
   Tags,
 } from 'tsoa';
-import GetProductsPagedRequestParams from './dto/requests/GetProductsPagedRequestParams';
 import { validateData } from '../utils/validators/classValidator';
 import { AddProductRequest } from './dto/requests/CreateProductRequest';
 import { requestValidationMiddleware } from '../middleware/requestValidationMiddleware';
 import UpdateProductRequest from './dto/requests/UpdateProductRequest';
+import GetProductsQueryParams from './dto/requests/GetProductsQueryParams';
 
 @Route('api/products')
 @Tags('Products')
 @Security('API_KEY')
 export class ProductsController extends Controller {
   /**
-   * Retrieves an array of all products included in the database
+   * Performs a search on all products based on the query parameters
+   * @param query string query to be used in the search
+   * @param page page to be used in output. Default value is 1
+   * @param offset count of items per page. Default value is 10
+   * @param availability availability of the product. Should correspond with the availability id
+   * @param condition condition of the product. Should correspond with the condition id
+   * @example query "prod"
+   * @example page 1
+   * @example offset 10
    */
   @Get()
-  public async getAllProducts(): Promise<ApiResponse<IProduct[]>> {
-    const products = await productsService.getAllProducts();
+  public async getProducts(
+    @Query() query?: string,
+    @Query() page?: number,
+    @Query() offset?: number,
+    @Query() availability?: string,
+    @Query() condition?: string
+  ): Promise<ApiResponse<PagedList<IProduct>>> {
+    const queryParams = new GetProductsQueryParams();
+    queryParams.query = query;
+    queryParams.page = page;
+    queryParams.pageSize = offset;
+    queryParams.availability = availability;
+    queryParams.condition = condition;
+
+    await validateData(queryParams, GetProductsQueryParams);
+
+    const products = await productsService.getProductsPaged(page, offset);
     return { success: true, data: products };
   }
 
@@ -49,48 +72,10 @@ export class ProductsController extends Controller {
   }
 
   /**
-   * Retrieves a paged list of products based on page and page size.
-   * @param page page to be used in output. Default value is 1
-   * @param offset page size to be used in output. Default value is 10
-   * @example page 1
-   * @example offset 10
-   */
-  @Get('paged')
-  public async getProductsPaged(
-    @Query() page?: number,
-    @Query() offset?: number
-  ): Promise<ApiResponse<PagedList<IProduct>>> {
-    const queryParams = new GetProductsPagedRequestParams();
-    queryParams.page = page;
-    queryParams.pageSize = offset;
-
-    await validateData(queryParams, GetProductsPagedRequestParams);
-
-    const products = await productsService.getProductsPaged(
-      queryParams.page,
-      queryParams.pageSize
-    );
-    return { success: true, data: products };
-  }
-
-  /**
-   * Performs a fulltext search on the products collection based on the query parameter
-   * @param query string query to be used in the search
-   * @example query "prod"
-   */
-  @Get('search')
-  public async fulltextSearchProducts(
-    @Query() query?: string
-  ): Promise<ApiResponse<IProduct[]>> {
-    const products = await productsService.fulltextSearchProducts(query);
-    return { success: true, data: products };
-  }
-
-  /**
    * Adds a new product to the database
    * @param req Request body containing the product data
    */
-  @Post('add')
+  @Post()
   @Middlewares([requestValidationMiddleware(AddProductRequest)])
   public async addProduct(
     @Body() req: AddProductRequest
@@ -103,7 +88,7 @@ export class ProductsController extends Controller {
    * Updates a product in the database
    * @param req Request body containing the product data
    */
-  @Put('update')
+  @Put()
   @Middlewares([requestValidationMiddleware(UpdateProductRequest)])
   public async updateProduct(
     @Body() req: UpdateProductRequest
@@ -120,7 +105,7 @@ export class ProductsController extends Controller {
    * @param id id of the product to be deleted
    * @example id "507f191e810c19729de860ea"
    */
-  @Delete('delete/{id}')
+  @Delete('{id}')
   public async deleteProduct(@Path() id: string): Promise<BaseApiResponse> {
     await productsService.deleteProduct(id);
     return { success: true, message: 'Product deleted' };

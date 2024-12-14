@@ -4,6 +4,8 @@
 import { TsoaRoute, fetchMiddlewares, ExpressTemplateService } from '@tsoa/runtime';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { ProductsController } from './../controllers/productsController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { LookupController } from './../controllers/lookupController';
 import { expressAuthentication } from './../authentication';
 // @ts-ignore - no great way to install types from subpackage
 import type { Request as ExRequest, Response as ExResponse, RequestHandler, Router } from 'express';
@@ -20,36 +22,9 @@ const models: TsoaRoute.Models = {
             "_id": {"dataType":"string"},
             "name": {"dataType":"string","required":true},
             "price": {"dataType":"double","required":true},
-            "stock": {"dataType":"double","required":true},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "FieldErrors": {
-        "dataType": "refObject",
-        "properties": {
-        },
-        "additionalProperties": {"dataType":"nestedObjectLiteral","nestedProperties":{"value":{"dataType":"any"},"message":{"dataType":"string","required":true}}},
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ApiResponse_IProduct-Array_": {
-        "dataType": "refObject",
-        "properties": {
-            "message": {"dataType":"string"},
-            "success": {"dataType":"boolean","required":true},
-            "validationErrors": {"ref":"FieldErrors"},
-            "data": {"dataType":"array","array":{"dataType":"refObject","ref":"IProduct"},"required":true},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ApiResponse_IProduct_": {
-        "dataType": "refObject",
-        "properties": {
-            "message": {"dataType":"string"},
-            "success": {"dataType":"boolean","required":true},
-            "validationErrors": {"ref":"FieldErrors"},
-            "data": {"ref":"IProduct","required":true},
+            "imagePath": {"dataType":"string","required":true},
+            "availability": {"dataType":"string","required":true},
+            "condition": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },
@@ -65,6 +40,13 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "FieldErrors": {
+        "dataType": "refObject",
+        "properties": {
+        },
+        "additionalProperties": {"dataType":"nestedObjectLiteral","nestedProperties":{"value":{"dataType":"any"},"message":{"dataType":"string","required":true}}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ApiResponse_PagedList_IProduct__": {
         "dataType": "refObject",
         "properties": {
@@ -76,13 +58,26 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ApiResponse_IProduct_": {
+        "dataType": "refObject",
+        "properties": {
+            "message": {"dataType":"string"},
+            "success": {"dataType":"boolean","required":true},
+            "validationErrors": {"ref":"FieldErrors"},
+            "data": {"ref":"IProduct","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "AddProductRequest": {
         "dataType": "refObject",
         "properties": {
             "_id": {"dataType":"string"},
             "name": {"dataType":"string","required":true},
             "price": {"dataType":"double","required":true},
-            "stock": {"dataType":"double","required":true},
+            "imagePath": {"dataType":"string","required":true},
+            "availability": {"dataType":"string","required":true},
+            "condition": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },
@@ -103,7 +98,30 @@ const models: TsoaRoute.Models = {
             "_id": {"dataType":"string","required":true},
             "name": {"dataType":"string","required":true},
             "price": {"dataType":"double","required":true},
-            "stock": {"dataType":"double","required":true},
+            "imagePath": {"dataType":"string","required":true},
+            "availability": {"dataType":"string","required":true},
+            "condition": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ILookup": {
+        "dataType": "refObject",
+        "properties": {
+            "_id": {"dataType":"string"},
+            "label": {"dataType":"string","required":true},
+            "type": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ApiResponse_ILookup-Array_": {
+        "dataType": "refObject",
+        "properties": {
+            "message": {"dataType":"string"},
+            "success": {"dataType":"boolean","required":true},
+            "validationErrors": {"ref":"FieldErrors"},
+            "data": {"dataType":"array","array":{"dataType":"refObject","ref":"ILookup"},"required":true},
         },
         "additionalProperties": false,
     },
@@ -128,10 +146,15 @@ export function RegisterRoutes(app: Router) {
         app.get('/api/products',
             authenticateMiddleware([{"API_KEY":[]}]),
             ...(fetchMiddlewares<RequestHandler>(ProductsController)),
-            ...(fetchMiddlewares<RequestHandler>(ProductsController.prototype.getAllProducts)),
+            ...(fetchMiddlewares<RequestHandler>(ProductsController.prototype.getProducts)),
 
-            async function ProductsController_getAllProducts(request: ExRequest, response: ExResponse, next: any) {
+            async function ProductsController_getProducts(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    query: {"in":"query","name":"query","dataType":"string"},
+                    page: {"in":"query","name":"page","dataType":"double"},
+                    offset: {"in":"query","name":"offset","dataType":"double"},
+                    availability: {"in":"query","name":"availability","dataType":"string"},
+                    condition: {"in":"query","name":"condition","dataType":"string"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -143,7 +166,7 @@ export function RegisterRoutes(app: Router) {
                 const controller = new ProductsController();
 
               await templateService.apiHandler({
-                methodName: 'getAllProducts',
+                methodName: 'getProducts',
                 controller,
                 response,
                 next,
@@ -186,70 +209,7 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/api/products/paged',
-            authenticateMiddleware([{"API_KEY":[]}]),
-            ...(fetchMiddlewares<RequestHandler>(ProductsController)),
-            ...(fetchMiddlewares<RequestHandler>(ProductsController.prototype.getProductsPaged)),
-
-            async function ProductsController_getProductsPaged(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    page: {"in":"query","name":"page","dataType":"double"},
-                    offset: {"in":"query","name":"offset","dataType":"double"},
-            };
-
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
-
-                const controller = new ProductsController();
-
-              await templateService.apiHandler({
-                methodName: 'getProductsPaged',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-              });
-            } catch (err) {
-                return next(err);
-            }
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/api/products/search',
-            authenticateMiddleware([{"API_KEY":[]}]),
-            ...(fetchMiddlewares<RequestHandler>(ProductsController)),
-            ...(fetchMiddlewares<RequestHandler>(ProductsController.prototype.fulltextSearchProducts)),
-
-            async function ProductsController_fulltextSearchProducts(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    query: {"in":"query","name":"query","dataType":"string"},
-            };
-
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
-
-                const controller = new ProductsController();
-
-              await templateService.apiHandler({
-                methodName: 'fulltextSearchProducts',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-              });
-            } catch (err) {
-                return next(err);
-            }
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.post('/api/products/add',
+        app.post('/api/products',
             authenticateMiddleware([{"API_KEY":[]}]),
             ...(fetchMiddlewares<RequestHandler>(ProductsController)),
             ...(fetchMiddlewares<RequestHandler>(ProductsController.prototype.addProduct)),
@@ -280,7 +240,7 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.put('/api/products/update',
+        app.put('/api/products',
             authenticateMiddleware([{"API_KEY":[]}]),
             ...(fetchMiddlewares<RequestHandler>(ProductsController)),
             ...(fetchMiddlewares<RequestHandler>(ProductsController.prototype.updateProduct)),
@@ -311,7 +271,7 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.delete('/api/products/delete/:id',
+        app.delete('/api/products/:id',
             authenticateMiddleware([{"API_KEY":[]}]),
             ...(fetchMiddlewares<RequestHandler>(ProductsController)),
             ...(fetchMiddlewares<RequestHandler>(ProductsController.prototype.deleteProduct)),
@@ -331,6 +291,37 @@ export function RegisterRoutes(app: Router) {
 
               await templateService.apiHandler({
                 methodName: 'deleteProduct',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/api/lookup',
+            authenticateMiddleware([{"API_KEY":[]}]),
+            ...(fetchMiddlewares<RequestHandler>(LookupController)),
+            ...(fetchMiddlewares<RequestHandler>(LookupController.prototype.getLookupByType)),
+
+            async function LookupController_getLookupByType(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    type: {"in":"query","name":"type","required":true,"dataType":"string"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new LookupController();
+
+              await templateService.apiHandler({
+                methodName: 'getLookupByType',
                 controller,
                 response,
                 next,

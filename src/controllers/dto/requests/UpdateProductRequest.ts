@@ -1,8 +1,8 @@
 import {
-  IsInt,
   IsMongoId,
   IsNumber,
   IsString,
+  IsUrl,
   Max,
   MaxLength,
   Min,
@@ -15,7 +15,9 @@ import { IProduct } from '../../../models/Product';
  *  "_id": "507f191e810c19729de860ea",
  *  "name": "Product renamed",
  *  "price": 420.69,
- *  "stock": 9
+ *  "imagePath": "https://example.com/image.jpg",
+ *  "availability": "507f191e810c19729de860ea",
+ *  "condition": "507f191e810c19729de860ea"
  * }
  */
 export default class UpdateProductRequest implements IProduct {
@@ -43,11 +45,12 @@ export default class UpdateProductRequest implements IProduct {
   @Min(0)
   price!: number;
 
-  /**
-   * Product stock quantity
-   */
-  @IsInt()
-  @Max(Number.MAX_SAFE_INTEGER)
-  @Min(0)
-  stock!: number;
+  @IsUrl()
+  imagePath!: string;
+
+  @IsMongoId()
+  availability!: string;
+
+  @IsMongoId()
+  condition!: string;
 }

@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { seedDatabase } from './seed';
 
 /**
  * Connects to the MongoDB database. Exits the process if the connection fails.
@@ -11,6 +12,7 @@ const connectDatabase = async (): Promise<void> => {
         throw new Error('MongoDB URI is not provided');
       })();
     await mongoose.connect(mongoURI);
+    await seedDatabase();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     process.exit(1);

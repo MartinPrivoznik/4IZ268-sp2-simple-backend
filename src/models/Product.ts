@@ -6,14 +6,26 @@ export interface IProduct {
   _id?: string;
   name: string;
   price: number;
-  stock: number;
+  imagePath: string;
+  availability: string;
+  condition: string;
 }
 
 const productSchema = new Schema<IProduct>(
   {
     name: { type: String, required: true },
     price: { type: Number, required: true },
-    stock: { type: Number, required: true },
+    imagePath: { type: String, required: true },
+    availability: {
+      type: String,
+      ref: 'Lookup',
+      required: true,
+    },
+    condition: {
+      type: String,
+      ref: 'Lookup',
+      required: true,
+    },
   },
   {
     timestamps: true,

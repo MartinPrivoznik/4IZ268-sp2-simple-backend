@@ -1,8 +1,9 @@
 import {
   IsEmpty,
-  IsInt,
+  IsMongoId,
   IsNumber,
   IsString,
+  IsUrl,
   Max,
   MaxLength,
   Min,
@@ -14,7 +15,10 @@ import { IProduct } from '../../../models/Product';
  * @example {
  *  "name": "Product example",
  *  "price": 420.69,
- *  "stock": 8
+ *  "stock": 8,
+ *  "imagePath": "https://example.com/image.jpg",
+ *  "availability": "507f191e810c19729de860ea",
+ *  "condition": "507f191e810c19729de860ea"
  * }
  */
 export class AddProductRequest implements IProduct {
@@ -39,11 +43,12 @@ export class AddProductRequest implements IProduct {
   @Min(0)
   price!: number;
 
-  /**
-   * Product stock quantity
-   */
-  @IsInt()
-  @Max(Number.MAX_SAFE_INTEGER)
-  @Min(0)
-  stock!: number;
+  @IsUrl()
+  imagePath!: string;
+
+  @IsMongoId()
+  availability!: string;
+
+  @IsMongoId()
+  condition!: string;
 }
