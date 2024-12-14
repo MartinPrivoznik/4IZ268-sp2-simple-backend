@@ -13,6 +13,8 @@ const app: Express = express();
 
 app.use(express.json());
 
+app.use(express.static('public'));
+
 app.use('/api/reference', swaggerUi.serve, swaggerUi.setup(swaggerDef));
 
 app.use(requireApiToken);

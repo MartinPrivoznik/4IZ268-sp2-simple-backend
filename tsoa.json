@@ -1,10 +1,11 @@
 {
-  "entryFile": "src/index.ts",
+  "entryFile": "server.ts",
   "noImplicitAdditionalProperties": "throw-on-extras",
   "controllerPathGlobs": ["src/controllers/*Controller.ts"],
   "spec": {
     "outputDirectory": "src/documentation",
     "specVersion": 3,
+    "basePath": "/api",
     "securityDefinitions": {
       "API_KEY": {
         "type": "apiKey",
