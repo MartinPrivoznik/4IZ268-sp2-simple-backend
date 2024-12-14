@@ -6,10 +6,19 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerDef from './documentation/swagger.json';
 import { notFoundHandlingMiddleware } from './middleware/notFoundHandlingMiddleware';
 import { requireApiToken } from './middleware/authMiddleware';
+import cors from 'cors';
 
 dotenv.config();
 
 const app: Express = express();
+
+app.use(
+  cors({
+    origin: '*',
+    methods: '*',
+    allowedHeaders: '*',
+  })
+);
 
 app.use(express.json());
 
