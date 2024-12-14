@@ -1,0 +1,25 @@
+{
+  "entryFile": "src/index.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "controllerPathGlobs": ["src/controllers/*Controller.ts"],
+  "spec": {
+    "outputDirectory": "src/documentation",
+    "specVersion": 3,
+    "securityDefinitions": {
+      "API_KEY": {
+        "type": "apiKey",
+        "name": "X-API-TOKEN",
+        "in": "header"
+      }
+    },
+    "security": [
+      {
+        "API_KEY": []
+      }
+    ]
+  },
+  "routes": {
+    "routesDir": "src/routes",
+    "authenticationModule": "src/authentication.ts"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "name": "lisakuv-obchod-backend",
+  "version": "1.0.0",
+  "description": "Backend pro Lišákův obchod",
+  "main": "dist/server.ts",
+  "scripts": {
+    "build": "npx tsoa spec-and-routes && npx tsc",
+    "start": "npx cross-env NODE_ENV=production node dist/server.js",
+    "dev": "npx tsoa spec-and-routes && npx nodemon",
+    "test": "jest",
+    "lint": "eslint ."
+  },
+  "author": "Martin Přívozník",
+  "dependencies": {
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.20.0",
+    "mongoose": "^8.6.1",
+    "swagger-ui-express": "^5.0.1",
+    "tsoa": "^6.4.0"
+  },
+  "devDependencies": {
+    "@types/eslint-config-prettier": "^6.11.3",
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.5.4",
+    "@types/swagger-ui-express": "^4.1.6",
+    "@typescript-eslint/eslint-plugin": "^8.5.0",
+    "@typescript-eslint/parser": "^8.5.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^9.10.0",
+    "eslint-config-prettier": "^9.1.0",
+    "nodemon": "^3.1.4",
+    "prettier": "^3.3.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.2",
+    "typescript-eslint": "^8.5.0"
+  }
+}

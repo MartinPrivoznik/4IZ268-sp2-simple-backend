@@ -1,0 +1,532 @@
+{
+	"openapi": "3.0.0",
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"IProduct": {
+				"properties": {
+					"_id": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"price": {
+						"type": "number",
+						"format": "double"
+					},
+					"stock": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"name",
+					"price",
+					"stock"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"FieldErrors": {
+				"properties": {},
+				"type": "object",
+				"additionalProperties": {
+					"properties": {
+						"value": {},
+						"message": {
+							"type": "string"
+						}
+					},
+					"required": [
+						"message"
+					],
+					"type": "object"
+				}
+			},
+			"ApiResponse_IProduct-Array_": {
+				"properties": {
+					"message": {
+						"type": "string"
+					},
+					"success": {
+						"type": "boolean"
+					},
+					"validationErrors": {
+						"$ref": "#/components/schemas/FieldErrors"
+					},
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/IProduct"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"success",
+					"data"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ApiResponse_IProduct_": {
+				"properties": {
+					"message": {
+						"type": "string"
+					},
+					"success": {
+						"type": "boolean"
+					},
+					"validationErrors": {
+						"$ref": "#/components/schemas/FieldErrors"
+					},
+					"data": {
+						"$ref": "#/components/schemas/IProduct"
+					}
+				},
+				"required": [
+					"success",
+					"data"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"PagedList_IProduct_": {
+				"properties": {
+					"items": {
+						"items": {
+							"$ref": "#/components/schemas/IProduct"
+						},
+						"type": "array"
+					},
+					"totalRecords": {
+						"type": "number",
+						"format": "double"
+					},
+					"currentPage": {
+						"type": "number",
+						"format": "double"
+					},
+					"offset": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"items",
+					"totalRecords",
+					"currentPage",
+					"offset"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ApiResponse_PagedList_IProduct__": {
+				"properties": {
+					"message": {
+						"type": "string"
+					},
+					"success": {
+						"type": "boolean"
+					},
+					"validationErrors": {
+						"$ref": "#/components/schemas/FieldErrors"
+					},
+					"data": {
+						"$ref": "#/components/schemas/PagedList_IProduct_"
+					}
+				},
+				"required": [
+					"success",
+					"data"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"AddProductRequest": {
+				"description": "Request body for adding a new product to store.",
+				"properties": {
+					"_id": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string",
+						"description": "Product name"
+					},
+					"price": {
+						"type": "number",
+						"format": "double",
+						"description": "Product price"
+					},
+					"stock": {
+						"type": "number",
+						"format": "double",
+						"description": "Product stock quantity"
+					}
+				},
+				"required": [
+					"name",
+					"price",
+					"stock"
+				],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"name": "Product example",
+					"price": 420.69,
+					"stock": 8
+				}
+			},
+			"BaseApiResponse": {
+				"properties": {
+					"message": {
+						"type": "string"
+					},
+					"success": {
+						"type": "boolean"
+					},
+					"validationErrors": {
+						"$ref": "#/components/schemas/FieldErrors"
+					}
+				},
+				"required": [
+					"success"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UpdateProductRequest": {
+				"description": "Request body for updating product in store.",
+				"properties": {
+					"_id": {
+						"type": "string",
+						"description": "Product id. Must be a valid MongoDB ObjectId."
+					},
+					"name": {
+						"type": "string",
+						"description": "Product name"
+					},
+					"price": {
+						"type": "number",
+						"format": "double",
+						"description": "Product price"
+					},
+					"stock": {
+						"type": "number",
+						"format": "double",
+						"description": "Product stock quantity"
+					}
+				},
+				"required": [
+					"name",
+					"price",
+					"stock",
+					"_id"
+				],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"_id": "507f191e810c19729de860ea",
+					"name": "Product renamed",
+					"price": 420.69,
+					"stock": 9
+				}
+			}
+		},
+		"securitySchemes": {
+			"API_KEY": {
+				"type": "apiKey",
+				"name": "X-API-TOKEN",
+				"in": "header"
+			}
+		}
+	},
+	"info": {
+		"title": "lisakuv-obchod-backend",
+		"version": "1.0.0",
+		"description": "Backend pro Lišákův obchod",
+		"contact": {
+			"name": "Martin Přívozník"
+		}
+	},
+	"paths": {
+		"/api/products": {
+			"get": {
+				"operationId": "GetAllProducts",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse_IProduct-Array_"
+								}
+							}
+						}
+					}
+				},
+				"description": "Retrieves an array of all products included in the database",
+				"tags": [
+					"Products"
+				],
+				"security": [
+					{
+						"API_KEY": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/api/products/{id}": {
+			"get": {
+				"operationId": "GetProductById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse_IProduct_"
+								}
+							}
+						}
+					}
+				},
+				"description": "Retrieves a product by its id",
+				"tags": [
+					"Products"
+				],
+				"security": [
+					{
+						"API_KEY": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "id of the product to be found",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						},
+						"example": "507f191e810c19729de860ea"
+					}
+				]
+			}
+		},
+		"/api/products/paged": {
+			"get": {
+				"operationId": "GetProductsPaged",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse_PagedList_IProduct__"
+								}
+							}
+						}
+					}
+				},
+				"description": "Retrieves a paged list of products based on page and page size.",
+				"tags": [
+					"Products"
+				],
+				"security": [
+					{
+						"API_KEY": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "page to be used in output. Default value is 1",
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						},
+						"example": 1
+					},
+					{
+						"description": "page size to be used in output. Default value is 10",
+						"in": "query",
+						"name": "offset",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						},
+						"example": 10
+					}
+				]
+			}
+		},
+		"/api/products/search": {
+			"get": {
+				"operationId": "FulltextSearchProducts",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse_IProduct-Array_"
+								}
+							}
+						}
+					}
+				},
+				"description": "Performs a fulltext search on the products collection based on the query parameter",
+				"tags": [
+					"Products"
+				],
+				"security": [
+					{
+						"API_KEY": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "string query to be used in the search",
+						"in": "query",
+						"name": "query",
+						"required": false,
+						"schema": {
+							"type": "string"
+						},
+						"example": "prod"
+					}
+				]
+			}
+		},
+		"/api/products/add": {
+			"post": {
+				"operationId": "AddProduct",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse_IProduct_"
+								}
+							}
+						}
+					}
+				},
+				"description": "Adds a new product to the database",
+				"tags": [
+					"Products"
+				],
+				"security": [
+					{
+						"API_KEY": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"description": "Request body containing the product data",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/AddProductRequest",
+								"description": "Request body containing the product data"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/products/update": {
+			"put": {
+				"operationId": "UpdateProduct",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BaseApiResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Updates a product in the database",
+				"tags": [
+					"Products"
+				],
+				"security": [
+					{
+						"API_KEY": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"description": "Request body containing the product data",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateProductRequest",
+								"description": "Request body containing the product data"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/products/delete/{id}": {
+			"delete": {
+				"operationId": "DeleteProduct",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BaseApiResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Deletes a product from the database",
+				"tags": [
+					"Products"
+				],
+				"security": [
+					{
+						"API_KEY": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "id of the product to be deleted",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						},
+						"example": "507f191e810c19729de860ea"
+					}
+				]
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/"
+		}
+	]
+}
