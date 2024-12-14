@@ -5,7 +5,6 @@ export function requireApiToken(
   res: Response,
   next: NextFunction
 ) {
-  console.log('API_TOKEN');
   const token = req.headers['x-api-token'] as string;
 
   if (!token) {
