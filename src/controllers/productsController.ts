@@ -43,7 +43,7 @@ export class ProductsController extends Controller {
     @Query() page?: number,
     @Query() offset?: number,
     @Query() availability?: string,
-    @Query() condition?: string
+    @Query() condition?: string[]
   ): Promise<ApiResponse<PagedList<IProduct>>> {
     const queryParams = new GetProductsQueryParams();
     queryParams.query = query;

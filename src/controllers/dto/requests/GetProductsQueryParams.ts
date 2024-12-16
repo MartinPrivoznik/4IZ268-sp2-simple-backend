@@ -1,4 +1,5 @@
 import {
+  IsArray,
   IsInt,
   IsMongoId,
   IsOptional,
@@ -30,7 +31,8 @@ export default class GetProductsQueryParams {
   @IsOptional()
   public availability?: string;
 
-  @IsMongoId()
   @IsOptional()
-  public condition?: string;
+  @IsArray()
+  @IsMongoId({ each: true })
+  public condition?: string[];
 }
