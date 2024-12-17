@@ -30,12 +30,12 @@ export class ProductsController extends Controller {
    * Performs a search on all products based on the query parameters
    * @param query string query to be used in the search
    * @param page page to be used in output. Default value is 1
-   * @param offset count of items per page. Default value is 10
+   * @param offset count of items per page. Default value is 8
    * @param availability availability of the product. Should correspond with the availability id
    * @param condition condition of the product. Should correspond with the condition id
    * @example query "prod"
    * @example page 1
-   * @example offset 10
+   * @example offset 8
    */
   @Get()
   public async getProducts(
