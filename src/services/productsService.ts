@@ -3,6 +3,7 @@ import { PagedList } from '../utils/dataStructures/PagedList';
 import Product, { IProduct } from '../models/Product';
 import NotFoundError from '../utils/exceptions/NotFoundError';
 import { validateObjectId } from '../utils/validators/mongoValidator';
+import GetProductsQueryParams from '../controllers/dto/requests/GetProductsQueryParams';
 
 /**
  * Returns an array of all products included in the database
@@ -26,18 +27,38 @@ export const getProductById = async (id: string): Promise<IProduct> => {
  * Returns a paged list of products based on page and page size. See {@link PagedList} for more details.
  * @param page page to be used in output. Default value is 1
  * @param pageSize count of items per page. Default value is 10
+ * @param query query to be used in the search
+ * @param availability availability of the product. Should correspond with the availability id
+ * @param conditions conditions of the product. Should correspond with the condition id
  * @returns Paginated list of products
  */
 export const getProductsPaged = async (
-  page?: number,
-  pageSize?: number
+  params: GetProductsQueryParams
 ): Promise<PagedList<IProduct>> => {
-  const p = page || 1;
-  const size = pageSize || defaultPageSize;
+  const p = params.page || 1;
+  const size = params.pageSize || defaultPageSize;
   const offset = (p - 1) * size;
 
-  const totalRecords = await Product.countDocuments().exec();
-  const products = await Product.find().skip(offset).limit(size).exec();
+  const queryRegex = new RegExp(params.query ?? '', 'i');
+
+  const filter: Record<string, unknown> = {
+    name: { $regex: queryRegex },
+  };
+
+  if (params.availability) {
+    filter.availability = params.availability;
+  }
+
+  if (
+    params.condition &&
+    Array.isArray(params.condition) &&
+    params.condition.length > 0
+  ) {
+    filter.condition = { $in: params.condition };
+  }
+
+  const totalRecords = await Product.countDocuments(filter).exec();
+  const products = await Product.find(filter).skip(offset).limit(size).exec();
 
   return {
     items: products,

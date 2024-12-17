@@ -54,7 +54,7 @@ export class ProductsController extends Controller {
 
     await validateData(queryParams, GetProductsQueryParams);
 
-    const products = await productsService.getProductsPaged(page, offset);
+    const products = await productsService.getProductsPaged(queryParams);
     return { success: true, data: products };
   }
 
