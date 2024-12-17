@@ -58,7 +58,11 @@ export const getProductsPaged = async (
   }
 
   const totalRecords = await Product.countDocuments(filter).exec();
-  const products = await Product.find(filter).skip(offset).limit(size).exec();
+  const products = await Product.find(filter)
+    .sort({ name: 1 })
+    .skip(offset)
+    .limit(size)
+    .exec();
 
   return {
     items: products,
