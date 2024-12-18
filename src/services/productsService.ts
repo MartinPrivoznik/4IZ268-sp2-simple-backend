@@ -73,36 +73,6 @@ export const getProductsPaged = async (
 };
 
 /**
- * Performs a fulltext search on the products collection based on the query parameter
- * @param query string query to be used in the search
- * @returns array of products that match the query
- */
-export const fulltextSearchProducts = (query?: string): Promise<IProduct[]> => {
-  const regex = new RegExp(query ?? '', 'i');
-
-  return Product.find({ name: { $regex: regex } }).exec();
-};
-
-/**
- * Returns a list of products that have a stock quantity between min and max
- * @param min minimum stock quantity
- * @param max maximum stock quantity
- * @returns
- */
-export const searchProductsByStockQuantity = (
-  min: number,
-  max: number
-): Promise<IProduct[]> => {
-  if (min > max) {
-    throw Error(
-      'Minimum stock quantity cannot be greater than maximum stock quantity'
-    );
-  }
-
-  return Product.find().where('stock').gte(min).lte(max).exec();
-};
-
-/**
  * Creates a new product in the database
  * @param product Product to be added
  * @returns Product that was added with its id assigned
