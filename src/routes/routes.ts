@@ -155,6 +155,7 @@ export function RegisterRoutes(app: Router) {
                     offset: {"in":"query","name":"offset","dataType":"double"},
                     availability: {"in":"query","name":"availability","dataType":"string"},
                     condition: {"in":"query","name":"condition","dataType":"array","array":{"dataType":"string"}},
+                    sort: {"in":"query","name":"sort","dataType":"string"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

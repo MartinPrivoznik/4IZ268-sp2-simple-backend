@@ -33,9 +33,11 @@ export class ProductsController extends Controller {
    * @param offset count of items per page. Default value is 6
    * @param availability availability of the product. Should correspond with the availability id
    * @param condition condition of the product. Should correspond with the condition id
+   * @param sort sort parameter to be used in the search. Default value is "name". Can also be "price"
    * @example query "prod"
    * @example page 1
    * @example offset 6
+   * @example sort "price"
    */
   @Get()
   public async getProducts(
@@ -43,7 +45,8 @@ export class ProductsController extends Controller {
     @Query() page?: number,
     @Query() offset?: number,
     @Query() availability?: string,
-    @Query() condition?: string[]
+    @Query() condition?: string[],
+    @Query() sort?: string
   ): Promise<ApiResponse<PagedList<IProduct>>> {
     const queryParams = new GetProductsQueryParams();
     queryParams.query = query;
@@ -51,6 +54,7 @@ export class ProductsController extends Controller {
     queryParams.pageSize = offset;
     queryParams.availability = availability;
     queryParams.condition = condition;
+    queryParams.sort = sort;
 
     await validateData(queryParams, GetProductsQueryParams);
 

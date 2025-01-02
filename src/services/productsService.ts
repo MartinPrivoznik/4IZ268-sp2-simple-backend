@@ -58,8 +58,16 @@ export const getProductsPaged = async (
   }
 
   const totalRecords = await Product.countDocuments(filter).exec();
+
+  const sortCriteria: Record<string, 1 | -1> = {};
+  if (params.sort === 'price') {
+    sortCriteria.price = 1;
+  } else {
+    sortCriteria.name = 1;
+  }
+
   const products = await Product.find(filter)
-    .sort({ name: 1 })
+    .sort(sortCriteria)
     .skip(offset)
     .limit(size)
     .exec();

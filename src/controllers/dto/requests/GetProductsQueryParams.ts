@@ -35,4 +35,9 @@ export default class GetProductsQueryParams {
   @IsArray()
   @IsMongoId({ each: true })
   public condition?: string[];
+
+  @IsOptional()
+  @MaxLength(20)
+  @IsString()
+  public sort?: string;
 }

@@ -344,7 +344,7 @@
 						"example": 1
 					},
 					{
-						"description": "count of items per page. Default value is 10",
+						"description": "count of items per page. Default value is 6",
 						"in": "query",
 						"name": "offset",
 						"required": false,
@@ -352,7 +352,7 @@
 							"format": "double",
 							"type": "number"
 						},
-						"example": 10
+						"example": 6
 					},
 					{
 						"description": "availability of the product. Should correspond with the availability id",
@@ -373,6 +373,14 @@
 							"items": {
 								"type": "string"
 							}
+						}
+					},
+					{
+						"in": "query",
+						"name": "sort",
+						"required": false,
+						"schema": {
+							"type": "string"
 						}
 					}
 				]
